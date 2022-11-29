@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script language="JavaScript" src="script/vue.js"></script>
+    <script type="text/javascript" src="script/axios.min.js"></script>
+    <script type="text/javascript">
+
+
+        //客户端发送json央视的数据给服务器
+        //客户端中的params需要修改成：data
+        window.onload=function(){
+            var vue=new Vue({
+
+               el:"#div0",
+                data:{
+                   uname:"lina",
+                    pwd:"ok"
+                },
+                methods:{
+                   axios02:function(){
+                       //axios表示发起一个异步请求，当成功的返回时调用then中的函数，报错调用catch中的函数
+                       axios({
+                           //以什么方式发送
+                           method:"POST",
+                           url:"axios02.do",
+                           data:{
+                               uname:vue.uname,
+                               pwd:vue.pwd
+                           }
+                       }).then(function(value){
+
+                           console.log(value.data);
+
+                       }).catch(function(reason){
+                           console.log(reason.response.data);
+                       })
+                   }
+                }
+
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="div0">
+    <input type="text" v-model="uname"><br/>
+    <input type="text" v-model="pwd"><br/>
+    <input type="button" @click="axios02" value="发送一个Json参数值的异步请求">
+</div>
+</body>
+</html>

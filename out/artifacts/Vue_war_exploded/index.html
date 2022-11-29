@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script language="JavaScript" src="script/vue.js"></script>
+    <script language="JavaScript">
+        function hello(){
+            person.sayHello();
+        }
+
+        //定义js对象的两种方法
+
+        /*
+        //定义js对象，绑定两个属性和一个行为
+        var person=new Object();
+        person.pid="p001";
+        person.pname="jim";
+        person.sayHello=function(){
+            alert("HELLO world");
+        }*/
+
+        var person={
+            "pid":"p001",
+            "pname":"jim",
+            "sayHello":function (){
+                alert("HELLO world");
+            }
+        }
+        window.onload=function(){
+        var vue=new Vue({
+
+            //#表示的是id，表示这个vue与id为div0的标签进行绑定
+            "el":"#div0",
+            data:{
+                //再<div></div>中可以用{{msg}}，来引用msg的数据
+                msg:"hello world",
+                uname:"张三丰",
+                num:1
+            }
+        });
+
+        //给条件渲染开始后面用的
+            var vue1=new Vue({
+
+                //#表示的是id，表示这个vue与id为div0的标签进行绑定
+                "el":"#div1",
+                data:{
+                    num:1
+                }
+    });
+
+            //给列表开始后面用的
+            var vue2=new Vue({
+
+                //#表示的是id，表示这个vue与id为div0的标签进行绑定
+                "el":"#div2",
+                data:{
+                 msg:"helloword",
+                        fruitList: [
+                            {fname:"苹果",price:5,fcount:100,remark:"苹果很好吃"},
+                            {fname:"苹果",price:5,fcount:100,remark:"苹果很好吃"},
+                            {fname:"苹果",price:5,fcount:100,remark:"苹果很好吃"},
+                            {fname:"苹果",price:5,fcount:100,remark:"苹果很好吃"}
+                        ]
+                },
+
+            });
+
+            //给事件开始后面用的
+            var vue3=new Vue({
+
+                //#表示的是id，表示这个vue与id为div0的标签进行绑定
+                "el":"#div3",
+           data:{
+                    msg:"helloworld"
+           },
+
+                //methods属性是保存方法的地方，是可以在这个绑定的标签中使用的方法，可以当作事件方法使用
+                methods:{
+                    myReverse:function(){
+                        //split中空字符串是指把每一个字符都取到,反转，然后join给他连接到一起
+                        this.msg=this.msg.split("").reverse().join("")
+                    }
+                }
+            });
+
+            //给侦听属性开始后面用的
+            var vue4=new Vue({
+
+                //#表示的是id，表示这个vue与id为div0的标签进行绑定
+                "el":"#div4",
+                data:{
+                    num1:1,
+                    num2:2,
+                    num3:0
+                },
+                watch:{
+                    //这个就是指监听num1，当num1改变的时候就调用这个函数，newValue就是num1改变后得到的值
+                    //所以要对num1和num2都要进行双向绑定
+
+                    //要进行数值运算，必须把他们都转换为数字
+                    num1:function(newValue){
+                        this.num3=parseInt(newValue)+parseInt(this.num2);
+                    },
+                    num2:function(newValue){
+                        this.num3=parseInt(this.num1)+parseInt(newValue);
+                    }
+
+                }
+            });
+
+
+            //给侦听属性开始后面用的
+            var vue5=new Vue({
+
+                //#表示的是id，表示这个vue与id为div0的标签进行绑定
+                "el":"#div5",
+                data:{
+                    msg:1
+                },
+                methods:{
+                    changeMag:function (){
+                        this.msg=this.msg+1;
+                    }
+                },
+                //vue对象创建之前
+                //msg属性没有被赋值
+                beforeCreate:function(){
+                    console.log("//vue对象创建之前");
+                    console.log("msg:"+this.msg);
+                },
+                // 2.实例创建完成
+                //msg属性可以被赋值完成
+                created:function(){
+                    console.log("//vue对象创建之后");
+                    console.log("msg:"+this.msg);
+                },
+                // 3.数据装载前
+                // <span id="span">{{msg}}</span>数据装载之前这个标签中的{{msg}}无法显示
+                beforeMount:function(){
+                    console.log("//数据装载之前");
+                    console.log("span:"+document.getElementById("span").innerText);
+                },
+                // 4.数据已经挂载
+                // <span id="span">{{msg}}</span>数据装载之后这个标签中的{{msg}}可以显示
+                mounted:function(){
+                    console.log("//数据装载之后");
+                    console.log("span:"+document.getElementById("span").innerText);
+                },
+                // 5.数据更新前
+                beforeUpdate:function(){
+                    console.log("//数据更新之前");
+                    //msg编为2之后才会调用这个方法，但span还没更新
+                    //结果 msg是2，span是1
+                    console.log("msg:"+this.msg);
+                    console.log("span:"+document.getElementById("span").innerText);
+                },
+                // 6.数据更新之后
+                updated:function(){
+                    console.log("//数据更新之前");
+                    //如果点击事件方法是msg+1
+                    //span更新了
+                    //结果：msg是2，span是2
+                    console.log("msg:"+this.msg);
+                    console.log("span:"+document.getElementById("span").innerText);
+
+                }
+            });
+
+
+
+
+
+        }
+
+    </script>
+</head>
+<body>
+<div id="div0">
+    <span>{{msg}}</span><br/>
+
+
+    <input type="button" value="打招呼" onclick="hello()">
+
+    <!--用v-bind:value表示绑定value属性，这个uname也是vue对象中的-->
+    <!--两种方式都可以-->
+    <input type="text" v-bind:value="uname">
+    <input type="text" :value="uname">
+
+    <input type="text" v-bind:value="msg">
+    <!--v-model指的是双向绑定，也就是说之前的v-bind是通过msg这个变量值控制input框
+    现在v-model，不仅msg控制input输入框，反过来，input输入框的内容也会改变msg的值
+    所以改变这个输入框的值，也会改变<span>{{msg}}</span>标签中内容
+    -->
+
+    <!--v-model:value中  :vlaue可以省略，直接写成v-model-->
+    <!--trim可以去除首尾空格,就是你输入框输入的内容会自动去除首尾空格，输入框失去焦点，空格也就没了-->
+    <input type="text" v-model.trim="msg"/>
+
+
+
+
+
+</div>
+
+
+<!--条件渲染-->
+<div>
+    <div id="div1">
+        <!--num双向绑定，可以通过输入框改变值，会导致下面用v-if属性的div标签一会显示一会不显示-->
+        <input tyep="text" v-model="num"/>
+        <!--&nbsp;表示空格-->
+        <!--v-if是指如果这个条件不成立，整个div就都没有了-->
+         <div v-if="num%2==0" style="width:200px;height:200px;background-color: chartreuse;">&nbsp;</div>
+
+        <!--  v-if和v-else之间不能插入其他节点，就像下面这个<br/>  -->
+
+        <!--<br/>-->
+        <!--v-else是指如果你是偶数显示上面那个，如果你不是偶数，显示下面这个-->
+        <div v-else="num%2==0" style="width:200px;height:200px;background-color: coral;">&nbsp;</div>
+
+        <!--v-show-->
+        <!--
+        1.这个当num是偶数的时候可以显示，当num是奇数的时候，div标签还在，但是设置了display属性值为none所以不显示，和上面两个直接没有div标签不同
+        <div style="width: 200px; height: 200px; background-color: blueviolet; display: none;">&nbsp;</div>
+
+        -->
+        <div v-show="num%2==0" style="width:200px;height:200px;background-color: blueviolet;">&nbsp;</div>
+    </div>
+
+    <!--列表渲染-->
+    <div id="div2">
+        <table border="1" width="400" cellpadding="4" cellspacing="0">
+            <tr>
+                <th>名称</th>
+                <th>单价</th>
+                <th>库存</th>
+                <th>备注</th>
+            </tr>
+            <!--v-for表示迭代-->
+            <tr align="center" v-for="fruit in fruitList">
+                <!--如果fname是个对象，后面可以接着用.属性值-->
+                <td>{{fruit.fname}}</td>
+                <td>{{fruit.price}}</td>
+                <td>{{fruit.fcount}}</td>
+                <td>{{fruit.remark}}</td>
+            </tr>
+
+        </table>
+    </div>
+
+    <!--事件驱动-->
+
+<div id="div3">
+    <span>{{msg}}</span><br/>
+
+    <!--v-on:click表示绑定单击事件-->
+    <!--myReverse函数是在vue的对象中methods属性定义的-->
+    <!--注意不要把myReverse写成myReverse()，myReverse()是指把函数返回值返回给属性-->
+    <!--v-on可以省略，变成@click-->
+    <input type="button" value="反转" @click="myReverse">
+</div>
+
+    <!--监听，当num1改变的时候，调用vue对象中对应的watch属性中绑定num1的方法-->
+    <div id="div4">
+        <input type="text" v-model="num1" size="2"/>
+        +
+        <input type="text" v-model="num2" size="2"/>
+        =
+        <span>{{num3}}</span>
+    </div>
+
+
+    <!--vue对象的生命周期-->
+    <div id="div5">
+        <span id="span">{{msg}}</span>
+        <input type="button" value="改变msg的值" @click="changeMag">
+    </div>
+
+</div>
+
+
+
+</body>
+</html>

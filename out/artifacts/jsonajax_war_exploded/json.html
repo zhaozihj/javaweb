@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Insert title here</title>
+		<script type="text/javascript">
+			// json的定义
+			//vlaue可以使字符串，数组，布尔，数字，json对象，有json对象的数组
+			var jsonobj={
+			    "key1":12,
+				"key2":"abc",
+				"key3":true,
+				"key4":[11,"arr",false],
+				"key5":{
+			    	"key5_1":12,
+					"key5_2":"value"
+				},
+				"key6":[{"key1":"12"},{"key1":123}]
+
+			};
+			//json就是一个对象
+			alert(typeof(jsonobj))
+			// json的访问
+            alert(jsonobj.key1);
+			alert(jsonobj.key2);
+			alert(jsonobj.key3);
+			//数组遍历
+			for(var i=0;i<jsonobj.key4.length;i++){
+				alert(jsonobj.key4[i]);
+			}
+			alert(jsonobj.key5.key5_1);
+			alert(jsonobj.key5.key5_2);
+			alert(jsonobj.key6);
+			//key6存储的就是json对象的数组，所以变量json被赋了个json对象
+			var json=jsonobj.key6[0];
+			// json对象转字符串
+			var jsonstring=JSON.stringify(jsonobj);//特别象java中对象的toString方法
+			alert(jsonstring)
+			// json字符串转json对象
+			var json2=JSON.parse(jsonstring);
+			alert(typeof(json2));
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

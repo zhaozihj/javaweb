@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script language="JavaScript" src="script/vue.js"></script>
+    <script type="text/javascript" src="script/axios.min.js"></script>
+    <script type="text/javascript">
+
+
+        //客户端发送json央视的数据给服务器
+        //客户端中的params需要修改成：data
+        window.onload=function(){
+            var vue=new Vue({
+
+               el:"#div0",
+                data:{
+                   uname:"lina",
+                    pwd:"ok"
+                },
+                methods:{
+                   axios03:function(){
+                       //axios表示发起一个异步请求，当成功的返回时调用then中的函数，报错调用catch中的函数
+                       axios({
+                           //以什么方式发送
+                           method:"POST",
+                           url:"http://localhost:8080/Vue/axios03.do",
+                           data:{
+                               uname:vue.uname,
+                               pwd:vue.pwd
+                           }
+                       }).then(function(value){
+
+                           var data=value.data;
+
+                           //data所对应的数据就是一个json的对象
+                           vue.uname=data.uname;
+                           vue.pwd=data.pwd;
+
+                           //此处value中data返回的是js的Object，因此可以直接点出属性
+                           //如果客户端获取的是一个json字符串
+                           //js语言中，也有字符串和js对象之间互转的API
+                           //String JSON.stringify(object)       object->string
+                           // Object  JSON.parse(String)         string->object
+
+
+                       }).catch(function(reason){
+                           console.log(reason.response.data);
+                       })
+                   }
+                }
+
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="div0">
+    <input type="text" v-model="uname"><br/>
+    <input type="text" v-model="pwd"><br/>
+    <input type="button" @click="axios03" value="发送一个Json参数值的异步请求">
+</div>
+</body>
+</html>
